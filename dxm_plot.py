@@ -5,7 +5,7 @@ from bokeh.layouts import row, column
 from bokeh.palettes import Spectral11 as palette
 
 # Specify a file to write the plot to
-output_file("hello.html")
+output_file("index.html")
 
 # Tuples of groups (year, party)
 x = [item for item in range(1,1400)]

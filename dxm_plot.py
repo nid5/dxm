@@ -38,15 +38,42 @@ p.xgrid.grid_line_color = None
 text_input1 = TextInput(value="", title="Fire rate")
 text_input2 = TextInput(value="", title="Arsenal fire rate support")
 
-p.circle(x='x', y='y', source=source2, size=10, color='black')
+p.circle(x='x', y='y', source=source2, size=4, color='black')
 p.ray(x=0, y='y', length=0, source=source2, line_width=2, color='black')
 p.ray(x='x', y=0, length=0, angle=1.5708, source=source2, line_width=2, color='black')
+p.text(x='x2', y='y2', text='text', source=source2)
 
-callback = CustomJS(args=dict(x=text_input1, y=text_input2, source=source2), code="""
-    var d = source.data;
+callback = CustomJS(args=dict(x=text_input1, y=text_input2, s2=source2, s1=source), code="""
+
+    var d = s2.data;
     d['x'] = [x.value];
     d['y'] = [y.value];
-    source.change.emit();
+    let names = [];
+    for (var item in s1.data) {
+        if (item == 'x_values') {
+            continue;
+        }
+        names.push(item)
+    };
+    var first = names.shift();
+    var second = names.shift();
+    names.push(first);
+    names.push(second);
+    console.log(names)
+    var solution;
+    for (var namething in names) {
+        var thing = names[namething];
+        if (y.value >= s1.data[thing][x.value]){
+            solution = thing;
+            break;
+        }
+    }
+    d['text'] = [solution];
+    var x2 = Number(x.value) + 3;
+    var y2 = Number(y.value) + 3;
+    d['x2'] = [x2];
+    d['y2'] = [y2];
+    s2.change.emit();
 """)
 
 
